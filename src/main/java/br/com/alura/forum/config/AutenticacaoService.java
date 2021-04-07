@@ -13,7 +13,7 @@ import br.com.alura.forum.modelo.Usuario;
 import br.com.alura.forum.repository.IUsuarioRepository;
 
 @Service
-public class AutenticacaoService implements UserDetailsService{
+public class AutenticacaoService implements UserDetailsService {
 
     @Autowired
     private IUsuarioRepository repository;
@@ -21,13 +21,14 @@ public class AutenticacaoService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> usuario = repository.findByEmail(username);
-        if(usuario.isPresent()){
+        if (usuario.isPresent()) {
             return usuario.get();
         }
         throw new UsernameNotFoundException("Dados inválidos");
     }
-    
-   /* public static void main(String[] args){
-        System.out.println(new BCryptPasswordEncoder().encode("123456"));
-    }*/
+
+    // public static void main(String[] args) {
+    // System.out.println(new BCryptPasswordEncoder().encode("123456"));
+    // }
+
 }

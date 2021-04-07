@@ -16,13 +16,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 public class Usuario implements UserDetails {
-	
-	@Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String email;
 	private String senha;
-	@ManyToMany(fetch= FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Perfil> perfis = new ArrayList<>();
 
 	@Override
@@ -84,14 +85,12 @@ public class Usuario implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.perfis;
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.senha;
 	}
 
 	@Override
