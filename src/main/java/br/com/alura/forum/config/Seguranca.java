@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.com.alura.forum.repository.IUsuarioRepository;
 
 @EnableWebSecurity
 @Configuration
@@ -19,6 +22,11 @@ public class Seguranca extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AutenticacaoService autenticacaoService;
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private IUsuarioRepository usuarioRepository;
 
     // configurações de autenticação
     @Override
@@ -56,7 +64,12 @@ public class Seguranca extends WebSecurityConfigurerAdapter {
                 // Com isso, perde-se o form de login já oferecido pelo Spring.
                 // Assim, vai ser necessário criar um controller para fazer a autenticação que,
                 // neste projeto, implementamos no AutenticacaoController.java
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                // a linha abaixo coloca um filtro customizado que implementa a lógica de
+                // autenticação por token antes do filtro padrão do Spring
+                // UsernamePasswordAuthenticationFilter
+                .addFilterBefore(new AutenticacaoViaTokenFilter(this.tokenService, this.usuarioRepository),
+                        UsernamePasswordAuthenticationFilter.class);
     }
 
     // configurações de recursos estáticos (arquivos css, imagens, js)
