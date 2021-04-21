@@ -13,7 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class TokenService {
-
+    // Injeção de propriedade do application.properties
     @Value("${forum.jwt.expiration}")
     private String expiration;
 
@@ -35,7 +35,6 @@ public class TokenService {
         } catch (Exception e) {
             return false;
         }
-
     }
 
     public Long getIdUsuario(String token) {

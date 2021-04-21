@@ -51,6 +51,8 @@ public class Seguranca extends WebSecurityConfigurerAdapter {
         // Se não estiver autenticado, abre o form login oferecido pelo Spring
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/topicos").permitAll()
                 .antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
+                // liberando acesso ao endpoint do Actuator (monitoramento)
+                .antMatchers(HttpMethod.GET, "/actuator/*").permitAll()
                 // liberando o endpoint para que alguém não autenticado consiga acessá-la para
                 // mandar seus dados de autenticação. Sem essa linha (até o .permiteAll()), vai
                 // gerar um 403
@@ -75,5 +77,7 @@ public class Seguranca extends WebSecurityConfigurerAdapter {
     // configurações de recursos estáticos (arquivos css, imagens, js)
     @Override
     public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**",
+                "/swagger-resources/**");
     }
 }
